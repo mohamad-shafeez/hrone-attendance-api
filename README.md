@@ -1,21 +1,31 @@
 # Employee Attendance & Analytics API
 
-FastAPI and MongoDB implementation for the HROne Software Engineer Trainee assignment.
+A FastAPI and MongoDB implementation for the HROne Software Engineer Trainee assignment.
 
 ## Run
 
-Use Python 3.11 or newer and MongoDB 6.0 or newer. Set `MONGO_URI` and `MONGO_DB` in the environment before starting the application. A local `.env` file may be used during development but must not be committed.
+Requirements: Python 3.11+ and MongoDB 6.0+.
+
+Create a local `.env` file using `.env.example` and configure `MONGO_URI` and `MONGO_DB`. Never commit your real `.env` file.
+
+Install dependencies and start the application:
 
 ```bash
 python -m pip install -r requirements.txt
-uvicorn app.main:app --port 8000
+uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-`GET /health` returns 200 only when MongoDB responds. Indexes are created idempotently at startup. The grader seeds the `employees` and `attendance_logs` collections directly; no sample data is required in this repository.
+`GET /health` checks MongoDB connectivity. Required indexes are created idempotently at startup. The grader can seed the `employees` and `attendance_logs` collections directly; sample data is not required.
 
-## Notes
+## Implementation Notes
 
-- All API instants are epoch milliseconds; stored instants are UTC BSON datetimes.
-- Analytics use MongoDB aggregation pipelines.
-- Read `REVIEW.md` and `DECISIONS.md` for the code review and design reasoning.
-- Before submission, run the app against MongoDB 6.0+ and test all endpoints, concurrent requests, and explain plans on a realistic dataset.
+* API timestamps are represented as epoch milliseconds; stored instants use UTC BSON datetimes.
+* Analytics are implemented using MongoDB aggregation pipelines.
+* `REVIEW.md` documents the code review, and `DECISIONS.md` explains key design choices.
+
+## Verification
+
+* Tested MongoDB connectivity, employee validation, duplicate prevention, punch-in/out calculations, attendance corrections, and audit history.
+* Tested monthly analytics, department summaries, headcount, late-leaderboard ranking, department trends, and all five explain endpoint variants.
+* Temporary test records were removed after testing.
+* Concurrent-request behavior and large-scale performance have not been benchmarked.
